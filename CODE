@@ -1,0 +1,30 @@
+const int tempPin = A0;   
+const int ledPin = 13;   
+const int buzzerPin = 7;  
+const float threshold = 30.0; // alarm trips above this temp (°C)
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int rawValue = analogRead(tempPin);
+  float voltage = rawValue * (5.0 / 1023.0);
+  float tempC = (voltage - 0.5) * 100.0;   // TMP36 conversion formula
+
+  Serial.print("Temperature: ");
+  Serial.print(tempC);
+  Serial.println(" °C");
+
+  if (tempC > threshold) {
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  delay(1000);
+}
